@@ -5,6 +5,11 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
+// Função para criar cliente Supabase (compatibilidade)
+export function createClient() {
+  return supabase
+}
+
 // Tipos para o banco de dados
 export interface Profile {
   id: string
