@@ -3,6 +3,8 @@
 import { useEffect, useState } from 'react'
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { useRouter } from 'next/navigation'
+import Paywall from '../components/Paywall'
+
 
 export default function Paywall({ children }: { children: React.ReactNode }) {
   const [isSubscribed, setIsSubscribed] = useState<boolean | null>(null)
