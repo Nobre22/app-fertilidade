@@ -21,7 +21,11 @@ import {
   Heart,
   Zap,
   Shield,
-  Target
+  Target,
+  ArrowLeft,
+  Calendar,
+  Apple,
+  Droplets
 } from 'lucide-react';
 
 interface Protocol {
@@ -37,12 +41,274 @@ interface Protocol {
   instructions: string;
   progress?: number;
   isActive?: boolean;
+  weeklyPlan?: WeeklyPlan[];
+}
+
+interface WeeklyPlan {
+  week: number;
+  title: string;
+  focus: string;
+  nutrition: string[];
+  supplements: string[];
+  avoid: string[];
+  checklist: string[];
 }
 
 export default function ProtocolsPage() {
   const { user } = useAuth();
   const [selectedProtocol, setSelectedProtocol] = useState<Protocol | null>(null);
   const [activeTab, setActiveTab] = useState('feminino');
+
+  const detoxWeeklyPlan: WeeklyPlan[] = [
+    {
+      week: 1,
+      title: 'Semana 1 - Eliminação de Toxinas',
+      focus: 'Remover alimentos processados e açúcar refinado',
+      nutrition: [
+        'Vegetais orgânicos (brócolis, couve, espinafre)',
+        'Frutas com baixo índice glicêmico (maçã, pera, berries)',
+        'Proteínas magras (peixe, frango orgânico)',
+        'Grãos integrais (quinoa, arroz integral)',
+        'Água filtrada (2-3 litros/dia)'
+      ],
+      supplements: [
+        'Clorofila líquida - 1 colher de sopa em jejum',
+        'Probióticos - 1 cápsula após o café da manhã',
+        'Magnésio - 200mg antes de dormir'
+      ],
+      avoid: [
+        'Açúcar refinado e adoçantes artificiais',
+        'Alimentos processados e industrializados',
+        'Refrigerantes e bebidas açucaradas',
+        'Álcool e cafeína em excesso',
+        'Glúten e laticínios (temporariamente)'
+      ],
+      checklist: [
+        'Beber água morna com limão ao acordar',
+        'Fazer 3 refeições principais e 2 lanches',
+        'Dormir pelo menos 7-8 horas',
+        'Praticar 30 min de caminhada',
+        'Meditar ou relaxar por 10 minutos'
+      ]
+    },
+    {
+      week: 2,
+      title: 'Semana 2 - Fortalecimento Hepático',
+      focus: 'Apoiar a função de desintoxicação do fígado',
+      nutrition: [
+        'Vegetais crucíferos (couve-flor, repolho, rúcula)',
+        'Beterraba e cenoura orgânicas',
+        'Chá verde e chá de dente-de-leão',
+        'Sementes de linhaça e chia',
+        'Azeite extra virgem prensado a frio'
+      ],
+      supplements: [
+        'Cardo mariano - 150mg 2x ao dia',
+        'Vitamina C - 1000mg pela manhã',
+        'Complexo B - 1 cápsula após almoço'
+      ],
+      avoid: [
+        'Frituras e gorduras trans',
+        'Carnes processadas (salsicha, presunto)',
+        'Excesso de proteína animal',
+        'Medicamentos desnecessários',
+        'Produtos de limpeza tóxicos'
+      ],
+      checklist: [
+        'Incluir suco verde no café da manhã',
+        'Fazer dry brushing antes do banho',
+        'Usar produtos de higiene naturais',
+        'Praticar yoga ou alongamento',
+        'Tomar banho de sol por 15 minutos'
+      ]
+    },
+    {
+      week: 3,
+      title: 'Semana 3 - Superalimentos',
+      focus: 'Introduzir alimentos ricos em nutrientes',
+      nutrition: [
+        'Spirulina e chlorella',
+        'Açaí e goji berry',
+        'Nozes e castanhas cruas',
+        'Abacate e coco',
+        'Peixes ricos em ômega-3 (salmão, sardinha)'
+      ],
+      supplements: [
+        'Ômega-3 - 1000mg 2x ao dia',
+        'Vitamina D3 - 2000 UI pela manhã',
+        'Zinco - 15mg antes de dormir'
+      ],
+      avoid: [
+        'Alimentos com conservantes',
+        'Corantes e aromatizantes artificiais',
+        'Excesso de sal refinado',
+        'Óleos vegetais refinados',
+        'Estresse excessivo'
+      ],
+      checklist: [
+        'Preparar smoothies com superalimentos',
+        'Incluir sementes em todas as refeições',
+        'Praticar respiração profunda 3x ao dia',
+        'Fazer sauna ou banho quente detox',
+        'Manter diário alimentar'
+      ]
+    },
+    {
+      week: 4,
+      title: 'Semana 4 - Equilíbrio Hormonal',
+      focus: 'Otimizar produção e metabolismo hormonal',
+      nutrition: [
+        'Sementes de abóbora e girassol',
+        'Vegetais de folhas verdes escuras',
+        'Frutas vermelhas (morango, framboesa)',
+        'Peixes de água fria',
+        'Chás de ervas (camomila, melissa)'
+      ],
+      supplements: [
+        'Maca peruana - 500mg pela manhã',
+        'Vitex (Agnus castus) - 400mg em jejum',
+        'Inositol - 2g 2x ao dia'
+      ],
+      avoid: [
+        'Plásticos em contato com alimentos',
+        'Produtos com parabenos',
+        'Excesso de soja não fermentada',
+        'Estresse crônico',
+        'Exercícios muito intensos'
+      ],
+      checklist: [
+        'Usar recipientes de vidro para alimentos',
+        'Praticar técnicas de redução de estresse',
+        'Dormir em horários regulares',
+        'Fazer automassagem abdominal',
+        'Conectar-se com a natureza'
+      ]
+    },
+    {
+      week: 5,
+      title: 'Semana 5 - Hidratação Profunda',
+      focus: 'Otimizar hidratação celular e eliminação',
+      nutrition: [
+        'Água de coco natural',
+        'Melancia e pepino',
+        'Sopas e caldos caseiros',
+        'Chás de ervas hidratantes',
+        'Alimentos ricos em potássio'
+      ],
+      supplements: [
+        'Eletrólitos naturais - conforme necessidade',
+        'Colágeno hidrolisado - 10g pela manhã',
+        'Silício orgânico - 1 cápsula 2x ao dia'
+      ],
+      avoid: [
+        'Excesso de cafeína',
+        'Bebidas diuréticas em excesso',
+        'Sal refinado em excesso',
+        'Ambientes muito secos',
+        'Desidratação'
+      ],
+      checklist: [
+        'Beber água a cada 2 horas',
+        'Monitorar cor da urina',
+        'Incluir frutas com alto teor de água',
+        'Usar umidificador se necessário',
+        'Fazer hidratação facial natural'
+      ]
+    },
+    {
+      week: 6,
+      title: 'Semana 6 - Antioxidantes Poderosos',
+      focus: 'Combater radicais livres e inflamação',
+      nutrition: [
+        'Frutas vermelhas e roxas',
+        'Vegetais coloridos variados',
+        'Chá verde e chá branco',
+        'Cacau puro (85% ou mais)',
+        'Especiarias (cúrcuma, gengibre)'
+      ],
+      supplements: [
+        'Resveratrol - 100mg à noite',
+        'Curcumina - 500mg 2x ao dia',
+        'Vitamina E - 400 UI pela manhã'
+      ],
+      avoid: [
+        'Alimentos queimados ou carbonizados',
+        'Óleos reutilizados',
+        'Excesso de ferro suplementar',
+        'Poluição do ar',
+        'Estresse oxidativo'
+      ],
+      checklist: [
+        'Incluir 5 cores diferentes de vegetais/dia',
+        'Preparar chá antioxidante',
+        'Usar especiarias em todas as refeições',
+        'Praticar exercícios moderados',
+        'Proteger-se da poluição'
+      ]
+    },
+    {
+      week: 7,
+      title: 'Semana 7 - Microbioma Saudável',
+      focus: 'Fortalecer flora intestinal e imunidade',
+      nutrition: [
+        'Kefir e iogurte natural',
+        'Vegetais fermentados (chucrute, kimchi)',
+        'Fibras prebióticas (alho, cebola)',
+        'Kombucha caseiro',
+        'Alimentos ricos em glutamina'
+      ],
+      supplements: [
+        'Probióticos multi-cepas - 50 bilhões UFC',
+        'Prebióticos (FOS/GOS) - 5g ao dia',
+        'L-Glutamina - 5g em jejum'
+      ],
+      avoid: [
+        'Antibióticos desnecessários',
+        'Excesso de açúcar',
+        'Alimentos ultra-processados',
+        'Estresse crônico',
+        'Medicamentos que afetam microbioma'
+      ],
+      checklist: [
+        'Consumir alimentos fermentados diariamente',
+        'Incluir fibras em cada refeição',
+        'Mastigar bem os alimentos',
+        'Evitar comer quando estressado',
+        'Fazer jejum intermitente leve'
+      ]
+    },
+    {
+      week: 8,
+      title: 'Semana 8 - Consolidação e Manutenção',
+      focus: 'Estabelecer hábitos sustentáveis a longo prazo',
+      nutrition: [
+        'Dieta equilibrada e variada',
+        'Alimentos orgânicos quando possível',
+        'Preparações caseiras',
+        'Hidratação adequada',
+        'Moderação em tudo'
+      ],
+      supplements: [
+        'Multivitamínico de qualidade',
+        'Ômega-3 de boa procedência',
+        'Probióticos de manutenção'
+      ],
+      avoid: [
+        'Retorno aos maus hábitos',
+        'Extremismos alimentares',
+        'Negligenciar o sono',
+        'Sedentarismo',
+        'Estresse não gerenciado'
+      ],
+      checklist: [
+        'Planejar cardápio semanal',
+        'Manter rotina de exercícios',
+        'Continuar práticas de relaxamento',
+        'Fazer check-up médico',
+        'Celebrar conquistas alcançadas'
+      ]
+    }
+  ];
 
   const protocols: Protocol[] = [
     {
@@ -173,7 +439,8 @@ export default function ProtocolsPage() {
         'Consultar médico se tiver condições hepáticas'
       ],
       progress: 85,
-      isActive: true
+      isActive: true,
+      weeklyPlan: detoxWeeklyPlan
     }
   ];
 
@@ -197,6 +464,91 @@ export default function ProtocolsPage() {
       case 'detox': return Shield;
       default: return Target;
     }
+  };
+
+  const renderWeeklyPlan = (weeklyPlan: WeeklyPlan[]) => {
+    return (
+      <div className="space-y-6">
+        {weeklyPlan.map((week) => (
+          <Card key={week.week} className="border-l-4 border-l-pink-500">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Calendar className="w-5 h-5" />
+                {week.title}
+              </CardTitle>
+              <CardDescription>{week.focus}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Nutrition */}
+                <div>
+                  <h4 className="font-semibold text-green-800 mb-3 flex items-center gap-2">
+                    <Apple className="w-4 h-4" />
+                    Alimentação Recomendada
+                  </h4>
+                  <div className="space-y-2">
+                    {week.nutrition.map((item, index) => (
+                      <div key={index} className="flex items-start gap-2">
+                        <CheckCircle className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-green-800">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Supplements */}
+                <div>
+                  <h4 className="font-semibold text-blue-800 mb-3 flex items-center gap-2">
+                    <Droplets className="w-4 h-4" />
+                    Suplementos
+                  </h4>
+                  <div className="space-y-2">
+                    {week.supplements.map((item, index) => (
+                      <div key={index} className="flex items-start gap-2">
+                        <CheckCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-blue-800">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Avoid */}
+                <div>
+                  <h4 className="font-semibold text-red-800 mb-3 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4" />
+                    Evitar
+                  </h4>
+                  <div className="space-y-2">
+                    {week.avoid.map((item, index) => (
+                      <div key={index} className="flex items-start gap-2">
+                        <AlertCircle className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-red-800">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Checklist */}
+                <div>
+                  <h4 className="font-semibold text-purple-800 mb-3 flex items-center gap-2">
+                    <Target className="w-4 h-4" />
+                    Checklist Diário
+                  </h4>
+                  <div className="space-y-2">
+                    {week.checklist.map((item, index) => (
+                      <div key={index} className="flex items-start gap-2">
+                        <CheckCircle className="w-4 h-4 text-purple-600 mt-0.5 flex-shrink-0" />
+                        <span className="text-sm text-purple-800">{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+    );
   };
 
   const renderProtocolList = (category: string) => {
@@ -279,7 +631,8 @@ export default function ProtocolsPage() {
       <div className="space-y-6">
         <div className="flex items-center gap-4 mb-6">
           <Button variant="outline" onClick={() => setSelectedProtocol(null)}>
-            ← Voltar
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Voltar
           </Button>
           <div>
             <h1 className="text-2xl font-bold">{selectedProtocol.name}</h1>
@@ -299,22 +652,39 @@ export default function ProtocolsPage() {
               </CardContent>
             </Card>
 
+            {/* Weekly Plan for Detox */}
+            {selectedProtocol.weeklyPlan && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Plano Semanal Detalhado</CardTitle>
+                  <CardDescription>
+                    Cronograma completo de 8 semanas com orientações específicas
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {renderWeeklyPlan(selectedProtocol.weeklyPlan)}
+                </CardContent>
+              </Card>
+            )}
+
             {/* Components */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Composição por Cápsula</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {selectedProtocol.components.map((component, index) => (
-                    <div key={index} className="flex items-start gap-3 p-2 rounded-lg hover:bg-gray-50">
-                      <div className="w-2 h-2 bg-pink-500 rounded-full mt-2 flex-shrink-0"></div>
-                      <span className="text-sm">{component}</span>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            {!selectedProtocol.weeklyPlan && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Composição por Cápsula</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    {selectedProtocol.components.map((component, index) => (
+                      <div key={index} className="flex items-start gap-3 p-2 rounded-lg hover:bg-gray-50">
+                        <div className="w-2 h-2 bg-pink-500 rounded-full mt-2 flex-shrink-0"></div>
+                        <span className="text-sm">{component}</span>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
             {/* Benefits */}
             <Card className="border-green-200 bg-green-50">
