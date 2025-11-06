@@ -28,11 +28,12 @@ export default function DashboardPage() {
   const { user, signOut } = useAuth();
   const router = useRouter();
 
+  // Dados zerados para novos usuários
   const stats = [
-    { label: 'Protocolos Ativos', value: '2', icon: BookOpen },
-    { label: 'Dias do Ciclo', value: '28', icon: Calendar },
-    { label: 'Dia Fértil', value: '14', icon: Target },
-    { label: 'Progresso Geral', value: '75%', icon: TrendingUp },
+    { label: 'Protocolos Ativos', value: '0', icon: BookOpen },
+    { label: 'Dias do Ciclo', value: '0', icon: Calendar },
+    { label: 'Dia Fértil', value: '0', icon: Target },
+    { label: 'Progresso Geral', value: '0%', icon: TrendingUp },
   ];
 
   const quickActions = [
@@ -66,12 +67,8 @@ export default function DashboardPage() {
     }
   ];
 
-  const recentActivities = [
-    { text: 'Protocolo Feminino iniciado', time: '2 horas atrás', type: 'protocol' },
-    { text: 'Ciclo menstrual registrado', time: '1 dia atrás', type: 'cycle' },
-    { text: 'Perfil atualizado', time: '3 dias atrás', type: 'profile' },
-    { text: 'Detox Semana 2 concluída', time: '5 dias atrás', type: 'detox' }
-  ];
+  // Atividades zeradas para novos usuários
+  const recentActivities: any[] = [];
 
   const handleQuickAction = (href: string) => {
     router.push(href);
@@ -176,7 +173,7 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
 
-              {/* Progress Overview */}
+              {/* Progress Overview - Zerado para novos usuários */}
               <Card className="mt-6">
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
@@ -185,30 +182,20 @@ export default function DashboardPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-4">
-                    <button
+                  <div className="text-center py-8">
+                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <BookOpen className="w-8 h-8 text-gray-400" />
+                    </div>
+                    <h3 className="font-semibold text-gray-900 mb-2">Nenhum protocolo ativo</h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Inicie um protocolo para começar a acompanhar seu progresso
+                    </p>
+                    <Button 
                       onClick={() => router.push('/protocols')}
-                      className="w-full text-left p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                      className="bg-pink-500 hover:bg-pink-600"
                     >
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-medium">Protocolo Feminino Avançado</span>
-                        <Badge variant="secondary">Em andamento</Badge>
-                      </div>
-                      <Progress value={65} className="h-2" />
-                      <p className="text-xs text-gray-500 mt-1">65% completo - 8 de 12 semanas</p>
-                    </button>
-                    
-                    <button
-                      onClick={() => router.push('/protocols')}
-                      className="w-full text-left p-3 rounded-lg hover:bg-gray-50 transition-colors"
-                    >
-                      <div className="flex justify-between items-center mb-2">
-                        <span className="text-sm font-medium">Detox para Fertilidade</span>
-                        <Badge variant="default">Ativo</Badge>
-                      </div>
-                      <Progress value={85} className="h-2" />
-                      <p className="text-xs text-gray-500 mt-1">85% completo - Semana 6 de 8</p>
-                    </button>
+                      Ver Protocolos Disponíveis
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -239,7 +226,7 @@ export default function DashboardPage() {
                 </CardContent>
               </Card>
 
-              {/* Recent Activity */}
+              {/* Recent Activity - Zerado para novos usuários */}
               <Card>
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
@@ -248,21 +235,30 @@ export default function DashboardPage() {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="space-y-3">
-                    {recentActivities.map((activity, index) => (
-                      <div key={index} className="flex items-start gap-3">
-                        <div className="w-2 h-2 bg-pink-500 rounded-full mt-2 flex-shrink-0"></div>
-                        <div className="flex-1">
-                          <p className="text-sm text-gray-900">{activity.text}</p>
-                          <p className="text-xs text-gray-500">{activity.time}</p>
+                  {recentActivities.length === 0 ? (
+                    <div className="text-center py-4">
+                      <Clock className="w-8 h-8 text-gray-300 mx-auto mb-2" />
+                      <p className="text-sm text-gray-500">
+                        Suas atividades aparecerão aqui conforme você usa o app
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {recentActivities.map((activity, index) => (
+                        <div key={index} className="flex items-start gap-3">
+                          <div className="w-2 h-2 bg-pink-500 rounded-full mt-2 flex-shrink-0"></div>
+                          <div className="flex-1">
+                            <p className="text-sm text-gray-900">{activity.text}</p>
+                            <p className="text-xs text-gray-500">{activity.time}</p>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                  </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
-              {/* Next Fertile Window */}
+              {/* Next Fertile Window - Zerado para novos usuários */}
               <Card className="border-green-200 bg-green-50">
                 <CardHeader>
                   <CardTitle className="text-lg text-green-800 flex items-center gap-2">
@@ -272,15 +268,49 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-center">
-                    <p className="text-2xl font-bold text-green-800">5 dias</p>
-                    <p className="text-sm text-green-600">Estimativa baseada no seu ciclo</p>
+                    <div className="w-12 h-12 bg-green-200 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <Calendar className="w-6 h-6 text-green-600" />
+                    </div>
+                    <p className="text-sm text-green-600 mb-3">
+                      Registre suas datas menstruais para calcular sua janela fértil
+                    </p>
                     <Button 
                       size="sm" 
-                      className="mt-3 bg-green-600 hover:bg-green-700"
+                      className="bg-green-600 hover:bg-green-700"
                       onClick={() => router.push('/calendar')}
                     >
-                      Ver Calendário
+                      Registrar Ciclo
                     </Button>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Getting Started Guide */}
+              <Card className="border-yellow-200 bg-yellow-50">
+                <CardHeader>
+                  <CardTitle className="text-lg text-yellow-800 flex items-center gap-2">
+                    <Sparkles className="w-4 h-4" />
+                    Como Começar
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3 text-sm text-yellow-800">
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-yellow-600 mt-0.5 flex-shrink-0" />
+                      <span>Complete seu perfil com informações básicas</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-yellow-600 mt-0.5 flex-shrink-0" />
+                      <span>Inicie um protocolo adequado ao seu perfil</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-yellow-600 mt-0.5 flex-shrink-0" />
+                      <span>Registre suas datas menstruais</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="w-4 h-4 text-yellow-600 mt-0.5 flex-shrink-0" />
+                      <span>Acompanhe seu progresso diariamente</span>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
