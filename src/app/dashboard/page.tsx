@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { useRouter } from 'next/navigation';
 import { 
   Heart, 
   Calendar, 
@@ -25,6 +26,7 @@ import {
 
 export default function DashboardPage() {
   const { user, signOut } = useAuth();
+  const router = useRouter();
 
   const stats = [
     { label: 'Protocolos Ativos', value: '2', icon: BookOpen },
@@ -71,6 +73,10 @@ export default function DashboardPage() {
     { text: 'Detox Semana 2 concluída', time: '5 dias atrás', type: 'detox' }
   ];
 
+  const handleQuickAction = (href: string) => {
+    router.push(href);
+  };
+
   return (
     <ProtectedRoute>
       <div className="min-h-screen pb-20 lg:pb-0 bg-gradient-to-br from-pink-50 via-rose-50 to-red-50">
@@ -99,9 +105,12 @@ export default function DashboardPage() {
                 >
                   Sair
                 </Button>
-                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-pink-400 to-rose-500 rounded-full flex items-center justify-center">
+                <button
+                  onClick={() => router.push('/profile')}
+                  className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-br from-pink-400 to-rose-500 rounded-full flex items-center justify-center hover:scale-105 transition-transform"
+                >
                   <User className="w-4 h-4 text-white" />
-                </div>
+                </button>
               </div>
             </div>
           </div>
@@ -144,12 +153,13 @@ export default function DashboardPage() {
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {quickActions.map((action, index) => (
-                      <div
+                      <button
                         key={index}
-                        className="group cursor-pointer p-4 rounded-lg border hover:shadow-lg transition-all duration-200"
+                        onClick={() => handleQuickAction(action.href)}
+                        className="group cursor-pointer p-4 rounded-lg border hover:shadow-lg transition-all duration-200 hover:border-pink-200 hover:bg-pink-50/50 text-left w-full"
                       >
                         <div className="flex items-start gap-3">
-                          <div className={`w-10 h-10 bg-gradient-to-r ${action.color} rounded-lg flex items-center justify-center`}>
+                          <div className={`w-10 h-10 bg-gradient-to-r ${action.color} rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform`}>
                             <action.icon className="w-5 h-5 text-white" />
                           </div>
                           <div className="flex-1">
@@ -158,9 +168,9 @@ export default function DashboardPage() {
                             </h3>
                             <p className="text-sm text-gray-600 mt-1">{action.description}</p>
                           </div>
-                          <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-pink-500 transition-colors" />
+                          <ChevronRight className="w-4 h-4 text-gray-400 group-hover:text-pink-500 transition-colors group-hover:translate-x-1" />
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </CardContent>
@@ -176,23 +186,29 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div>
+                    <button
+                      onClick={() => router.push('/protocols')}
+                      className="w-full text-left p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-sm font-medium">Protocolo Feminino Avançado</span>
                         <Badge variant="secondary">Em andamento</Badge>
                       </div>
                       <Progress value={65} className="h-2" />
                       <p className="text-xs text-gray-500 mt-1">65% completo - 8 de 12 semanas</p>
-                    </div>
+                    </button>
                     
-                    <div>
+                    <button
+                      onClick={() => router.push('/protocols')}
+                      className="w-full text-left p-3 rounded-lg hover:bg-gray-50 transition-colors"
+                    >
                       <div className="flex justify-between items-center mb-2">
                         <span className="text-sm font-medium">Detox para Fertilidade</span>
                         <Badge variant="default">Ativo</Badge>
                       </div>
                       <Progress value={85} className="h-2" />
                       <p className="text-xs text-gray-500 mt-1">85% completo - Semana 6 de 8</p>
-                    </div>
+                    </button>
                   </div>
                 </CardContent>
               </Card>
@@ -258,7 +274,11 @@ export default function DashboardPage() {
                   <div className="text-center">
                     <p className="text-2xl font-bold text-green-800">5 dias</p>
                     <p className="text-sm text-green-600">Estimativa baseada no seu ciclo</p>
-                    <Button size="sm" className="mt-3 bg-green-600 hover:bg-green-700">
+                    <Button 
+                      size="sm" 
+                      className="mt-3 bg-green-600 hover:bg-green-700"
+                      onClick={() => router.push('/calendar')}
+                    >
                       Ver Calendário
                     </Button>
                   </div>
